@@ -1,5 +1,5 @@
 {
-    "name": "barretstorck/socket",
+    "name": "barretstorck/rocket",
     "type": "library",
     "description": "An object oriented wrapper library for PHP sockets",
     "license": "MIT",
@@ -28,12 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "BarretStorck\\Socket\\": "src/"
+            "BarretStorck\\Rocket\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "BarretStorck\\Socket\\Tests\\": "tests/"
+            "BarretStorck\\Rocket\\Tests\\": "tests/"
         }
     }
 }

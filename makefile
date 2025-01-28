@@ -21,7 +21,8 @@ build:
 		-v $(GIT_DIR):/app \
 		-w /app/$(REL_DIR) \
 		composer/composer \
-			update
+			update \
+				--ignore-platform-reqs
 
 test:
 	docker run \
