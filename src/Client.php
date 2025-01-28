@@ -13,7 +13,7 @@ final class Client extends AbstractConnection
     /**
      *
      */
-    public function __construct(string $host, int $port = null, int $timeout = 0, int $domain = AF_INET, int $type = SOCK_STREAM, int $protocol = SOL_TCP, Socket $socket = null)
+    public function __construct(string $host, null|int $port = null, int $timeout = 0, int $domain = AF_INET, int $type = SOCK_STREAM, int $protocol = SOL_TCP, Socket $socket = null)
     {
         $this->socket = $socket;
         parent::__construct($host, $port, $timeout, $domain, $type, $protocol);

@@ -21,7 +21,7 @@ abstract class AbstractConnection
     /**
      *
      */
-    public function __construct(string $host, int $port = null, int $timeout = 0, int $domain = AF_INET, int $type = SOCK_STREAM, int $protocol = SOL_TCP)
+    public function __construct(string $host, null|int $port = null, int $timeout = 0, int $domain = AF_INET, int $type = SOCK_STREAM, int $protocol = SOL_TCP)
     {
         $this
             ->setDomain($domain) // Set the domain first because host and port rely on it
@@ -83,7 +83,7 @@ abstract class AbstractConnection
     /**
      *
      */
-    protected function setPort(int $port = null): self
+    protected function setPort(null|int $port = null): self
     {
         // If using a unix socket
         // then port number is irrelevant so we set it to null.
