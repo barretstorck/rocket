@@ -3,6 +3,7 @@ GIT_DIR = $(shell git rev-parse --show-toplevel)
 REL_DIR = $(shell realpath -s --relative-to=$(GIT_DIR) $(MKFILE_DIR))
 UID = $(shell id -u)
 GID = $(shell id -g)
+DOCKER_CONTAINER = ghcr.io/barretstorck/php:8.4-cli-alpine-composer-sockets-xdebug
 
 .PHONEY: *
 
@@ -20,9 +21,8 @@ build:
 		-u $(UID):$(GID) \
 		-v $(GIT_DIR):/app \
 		-w /app/$(REL_DIR) \
-		composer/composer \
-			update \
-				--ignore-platform-reqs
+		$(DOCKER_CONTAINER) \
+			composer update --ignore-platform-reqs
 
 test:
 	docker run \
@@ -31,8 +31,7 @@ test:
 		-v $(GIT_DIR):/app \
 		-w /app/$(REL_DIR) \
 		-e XDEBUG_MODE=develop,debug,coverage \
-		-v $(GIT_DIR)/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:ro \
-		jitesoft/phpunit \
+		$(DOCKER_CONTAINER) \
 			./vendor/bin/phpunit \
 				--testdox \
 				--coverage-text \
@@ -55,7 +54,7 @@ lint:
 		-u $(UID):$(GID) \
 		-v $(GIT_DIR):/app \
 		-w /app/$(REL_DIR) \
-		php:8.4-cli \
+		$(DOCKER_CONTAINER) \
 			./vendor/bin/phpcs \
 				-s \
 				-p \
@@ -71,7 +70,7 @@ format:
 		-u $(UID):$(GID) \
 		-v $(GIT_DIR):/app \
 		-w /app/$(REL_DIR) \
-		php:8.4-cli \
+		$(DOCKER_CONTAINER) \
 			./vendor/bin/phpcbf \
 				-p \
 				--extensions=php \
@@ -80,6 +79,7 @@ format:
 				/app
 
 clean:
+	docker image rm $(DOCKER_CONTAINER)
 	rm -rf \
 		composer.lock \
 		code_coverage \
