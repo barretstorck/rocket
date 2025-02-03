@@ -13,7 +13,7 @@ final class Client extends AbstractConnection
     /**
      *
      */
-    public function __construct(string $host, null|int $port = null, int $timeout = 0, int $domain = AF_INET, int $type = SOCK_STREAM, int $protocol = SOL_TCP, Socket $socket = null)
+    public function __construct(string $host, null|int $port = null, int $timeout = 0, int $domain = AF_INET, int $type = SOCK_STREAM, int $protocol = SOL_TCP, null|Socket $socket = null)
     {
         $this->socket = $socket;
         parent::__construct($host, $port, $timeout, $domain, $type, $protocol);
@@ -47,9 +47,11 @@ final class Client extends AbstractConnection
             return false;
         }
 
-        // If socker_recv returns false while attempting to read data
-        // then the socket can be considered disconnected.
-        return socket_recv($this->socket, $data, 1, MSG_PEEK) !== false;
+        // If socket_recv returns false while attempting to read data
+        // then the socket can be considered disconnected. If it returns 0 then
+        // that means an orderly shutdown has occurred.
+        $result = socket_recv($this->socket, $data, 1, MSG_PEEK);
+        return $result !== false && $result !== 0;
     }
 
     /**
